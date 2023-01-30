@@ -1,0 +1,60 @@
+<button id="openChat">Chat starten</button>
+<div id="chatContainer" style="display: none;">
+  <button id="closeChat">Chat beenden</button>
+  <div id="messages" style="height: 300px; overflow: auto;">
+    <div class="message">
+      <p>Hi, wie kann ich Ihnen helfen?</p>
+    </div>
+  </div>
+  <form id="messageForm">
+    <input type="text" id="messageInput" placeholder="Ihre Nachricht">
+    <button type="submit">Senden</button>
+  </form>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script>
+  var openChatButton = document.getElementById('openChat');
+  var closeChatButton = document.getElementById('closeChat');
+  var chatContainer = document.getElementById('chatContainer');
+  var messages = document.getElementById('messages');
+  // Chatfenster öffnen, wenn der "Chat starten"-Button geklickt wird
+  openChatButton.onclick = function() {
+    chatContainer.style.display = 'block';
+    socket.emit('user_uttered', { message: 'Hi, wie kann ich Ihnen helfen?' });
+  };
+
+  // Chatfenster schließen, wenn der "Chat beenden"-Button geklickt wird
+  closeChatButton.onclick = function() {
+    chatContainer.style.display = 'none';
+  };
+
+  // Verbindung zum Rasa-Server herstellen
+  var socket = io('http://localhost:5005');
+
+  // Nachricht senden, wenn das Formular gesendet wird
+  var messageForm = document.getElementById('messageForm');
+  messageForm.onsubmit = function(event) {
+    event.preventDefault();
+
+    var messageInput = document.getElementById('messageInput');
+    var message = messageInput.value;
+
+    var newUserMessage = document.createElement('div');
+    newUserMessage.classList.add('message');
+    newUserMessage.innerHTML = '<p>' + message + '</p>';
+    messages.appendChild(newUserMessage);
+
+    socket.emit('message', message);
+    messageInput.value = '';
+  };
+
+  // Empfangene Nachrichten anzeigen
+  socket.on('message', function(message) {
+    var messages = document.getElementById('messages');
+    var newMessage = document.createElement('div');
+    newMessage.classList.add('message');
+    newMessage.innerHTML = '<p>' + message + '</p>';
+    messages.appendChild(newMessage);
+  });
+</script>

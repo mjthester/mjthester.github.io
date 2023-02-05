@@ -1,5 +1,51 @@
 <!DOCTYPE html>
 <html lang="de">
- <div id="rasa-chat-widget" data-websocket-url="https://mjthester.pagekite.me/"></div>
- <script src="https://unpkg.com/@rasahq/rasa-chat" type="application/javascript"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbotbackend</title>
+</head>
+<body>
+  <style>
+  .rw-conversation-container .rw-header{background-color: #e58801;}
+  .rw-conversation-container .rw-messages-container .rw-message .rw-client{background-color: #7c8484;}
+  .rw-launcher{background-color: whitesmoke;}
+  .rw-conversation-container{width: 500px;}
+
+
+  </style>
+    <script>!(function () {
+        let e = document.createElement("script"),
+          t = document.head || document.getElementsByTagName("head")[0];
+          (e.src = "https://cdn.jsdelivr.net/npm/rasa-webchat@1.x.x/lib/index.js"),
+          // Replace 1.x.x with the version that you want
+          (e.async = !0),
+          (e.onload = () => {
+            window.WebChat.default(
+              {
+                initPayload: "/get_started",
+                tooltipPayload: "/get_started",
+                tooltip: true,
+                tooltipDelay: 500,
+                customData: { language: "de" },
+                socketUrl: "https://mjthester.pagekite.me/",
+                title: 'Universität Passau',
+                // subtitle: 'Chatbot Assistent Max',
+                // add other props here
+                openLauncherImage: "logo_uni.png",
+                closeImage: "schliessen.png",
+                profileAvatar: "uni_avatar.png",
+                inputTextFieldHint: "Stell eine Frage...",
+                params: {"storage": "session"},
+                embedded: true
+              },
+              null
+            );
+          }),
+          t.insertBefore(e, t.firstChild);
+      })();
+      </script>
+</body>
 </html>
+
